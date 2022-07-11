@@ -19,7 +19,7 @@ public:
         while(!q.empty()){
             int val;
             int s = q.size();
-            for(int i=0; i<s; i++){
+            for(int i = 0; i < s; i++){
                 TreeNode* temp = q.front();
                 q.pop();
                 val = temp->val;
