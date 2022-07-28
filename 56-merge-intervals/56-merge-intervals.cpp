@@ -1,12 +1,12 @@
 class Solution {
 public:
-    static bool cmp(vector<int> &a, vector<int> &b){
-        return b[0] > a[0];
-    }
+    // static bool cmp(vector<int> &a, vector<int> &b){
+    //     return b[0] > a[0];
+    // }
     
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
         vector<vector<int>> ans;
-        sort(intervals.begin(), intervals.end(), cmp);
+        sort(intervals.begin(), intervals.end());
         for(auto i : intervals){
             if(ans.size() == 0){
                 ans.push_back(i);
