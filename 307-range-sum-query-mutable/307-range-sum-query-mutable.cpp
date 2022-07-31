@@ -1,0 +1,64 @@
+class NumArray {
+public:
+    // vector<int> n, pre;
+    inline static int n;
+    int *segTree;
+    NumArray(vector<int>& nums) {
+        // n = nums;
+        // int p = 0;
+        // pre.push_back(0);
+        // for(auto i:n){
+        //     pre.push_back(p + i);            
+        //     p += i;
+        // }
+        n = size(nums);
+        segTree = (int*)malloc(4 * n * sizeof(int));
+        build(nums, 1, 0, n - 1);
+    }
+    
+    void build(vector<int>& nums, int segIdx, int l, int r){
+        if(l == r) segTree[segIdx] = nums[l];      
+        else {
+            int mid = (l + r) / 2;                
+            build(nums, 2*segIdx, l, mid);        
+            build(nums, 2*segIdx + 1, mid + 1, r); 
+            segTree[segIdx] = segTree[2*segIdx] + segTree[2*segIdx + 1];  
+        }
+    }
+    
+    void update(int index, int val, int segIdx = 1, int l = 0, int r = n - 1) {
+        // int temp = val - n[index]; 
+        // for(int i=index+1; i<n.size(); i++)
+        //     pre[i] += temp;
+        // pre[index] += temp;
+        // n[index] = val;
+        
+         if(l == r) segTree[segIdx] = val;           
+        else {
+            int mid = (l + r) / 2;
+            if (index <= mid) update(index, val, 2*segIdx, l, mid);       
+            else update(index, val, 2*segIdx + 1, mid + 1, r);            
+            segTree[segIdx] = segTree[2*segIdx] + segTree[2*segIdx + 1];  
+        }
+    }
+    
+    int sumRange(int left, int right, int segIdx = 1, int l = 0, int r = n - 1) {
+        // int ans = 0;
+        // for(int i=left; i<=right; i++)
+        //     ans += n[i];
+        // return pre[right] - pre[left-1];
+        
+        if(left > right) return 0;   
+        if(l == left && r == right) return segTree[segIdx]; 
+        int mid = (l + r) / 2;
+        return  sumRange(left, min(right, mid), 2*segIdx, l, mid) + 
+                sumRange(max(left, mid + 1), right, 2*segIdx + 1, mid + 1, r);
+    }
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray* obj = new NumArray(nums);
+ * obj->update(index,val);
+ * int param_2 = obj->sumRange(left,right);
+ */
